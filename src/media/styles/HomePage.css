@@ -1,0 +1,21 @@
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgb(227, 197, 227);
+  color: black;
+  border-radius: 50% !important;
+  width: 40px !important ;
+  height: 40px !important ;
+  border: 1px solid violet;
+  font-size: 5px;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  content: ">";
+  color: black;
+  font-weight: 700;
+  font-size: 15px !important;
+}
+
+.swiper-horizontal {
+  position: static !important;
+}
