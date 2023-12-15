@@ -4,12 +4,13 @@ import axios from "axios";
 import io from "socket.io-client";
 import Swal from "sweetalert";
 
-const useSignup = () => {
+const useLogin = () => {
   const axiosInstance = axios.create();
-  let endpoint = "/stakeholder/signup/";
+  let endpoint = "/stakeholder/login/";
   let method = "post";
   let headers = header;
-  const handleSignup = async (body) => {    
+  const handleLogin = async (body) => {    
+    console.log(body)
     try {
       let response_obj = await APIMiddleware(
         axiosInstance,
@@ -38,13 +39,13 @@ const useSignup = () => {
             button:'OK'
           });    
         }
-        console.log("Error in SignUp: ", response_obj.error);
+        console.log("Error in Login: ", response_obj.error);
       }
     } catch (error) {}
   };
   return {
-    handleSignup,
+    handleLogin,
   };
 };
 
-export default useSignup;
+export default useLogin;

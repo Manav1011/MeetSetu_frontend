@@ -1,7 +1,7 @@
 import axios from "axios";
 // import base_url from "src/base_url";
 
-import Swal from "sweetalert";
+import swal from "sweetalert";
 import { base_url } from "../utils/constant";
 
 // Used for handling expired tokens
@@ -50,16 +50,16 @@ const APIMiddleware = async (
         response_obj = { error: true, error: error };
       }
     }
-  } else if (method === "post") {
-    try {
+  } else if (method === "post") {    
+    try {      
       const response = await reqInstance.post(`${base_url}${endpoint}`, data, {
         headers,
-      });
+      })
       if(response.data.data.secret){
         localStorage.setItem("secret",response.data.data.secret)
-      }      
-      response_obj = { error: false, response: response };
-    } catch (error) {
+      }            
+      response_obj = { error: response.data.error, response: response };      
+    } catch (error) {  
       if (error.response && error.response.status === 401) {
         const result = await expireToken(refresh);
         localStorage.setItem("accessToken", result.access);
@@ -97,15 +97,6 @@ const expireToken = async (refreshToken) => {
     });
 };
 
-const showAlert = (title, text) => {
-  Swal({
-    title: title,
-    text: text,
-    icon: "success",
-    button: "OK",
-  });
-};
-
 const encrypt_xor = async (plaintext,key) => {
     let textEncoder = new TextEncoder();
 
@@ -119,4 +110,4 @@ const encrypt_xor = async (plaintext,key) => {
     return  btoa(String.fromCharCode(...ciphertextBytes))
 }
 
-export { APIMiddleware, showAlert};
+export { APIMiddleware};
