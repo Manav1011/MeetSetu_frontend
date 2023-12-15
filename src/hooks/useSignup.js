@@ -8,7 +8,7 @@ const useSignup = () => {
   let endpoint = "/stakeholder/signup/";
   let method = "post";
   let headers = header;
-  const handleSignup = async (body) => {
+  const handleSignup = async (body) => {    
     try {
       let response_obj = await APIMiddleware(
         axiosInstance,
@@ -17,10 +17,9 @@ const useSignup = () => {
         headers,
         body,
         null
-      );
-      console.log(response_obj);
+      );      
       if (response_obj.error === false) {
-        const socket = io(`http://localhost:3001`);
+        // const socket = io(`http://localhost:3001`);
 
         console.log(response_obj?.response?.data?.message);
         console.log(response_obj?.response?.data?.data?.secret);
