@@ -2,21 +2,24 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import useSignup from "../../hooks/useSignup";
+import storysetillustration from './Digital presentation-amico.svg'
 
 const Signup = () => {
   const { register, handleSubmit } = useForm();
   const { handleSignup } = useSignup();
+  
   const handleFormSubmit = (data) => {
     handleSignup(data);
   };
   return (
     <div>
-      <section className="flex flex-col md:flex-row h-screen items-center z-0">
-        <div className="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+      <section className="flex flex-col md:flex-row h-screen items-center">
+      <div className="hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">
           <img
-            src="https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
+            src={storysetillustration}
             alt=""
-            className="w-full h-full object-cover"
+            className="object-cover"
+            style={{width:'100%',height:'auto'}}
           />
         </div>
 

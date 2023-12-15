@@ -4,22 +4,19 @@ import { Link } from "react-router-dom";
 import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../helpers/yupValidator";
+import storysetillustration from './Digital presentation-amico.svg'
+import useLogin from "../../hooks/useLogin";
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(loginSchema) });
-
-  console.log(errors);
+  const { register, handleSubmit } = useForm();
+  const { handleLogin } = useLogin();
   const handleFormSubmit = (data) => {
-    console.log(data);
+    handleLogin(data);
   };
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
-      <div className="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+      <div className="hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">
         <img
-          src="https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
+          src={storysetillustration}
           alt=""
           width=""
           className="w-full h-full object-cover"
@@ -49,13 +46,13 @@ const Login = () => {
                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none focus:placeholder-black text-black"
                 {...register("email")}
               />
-              <ErrorMessage
+              {/* <ErrorMessage
                 name="email"
                 errors={errors}
                 render={({ message }) => (
                   <p className="text-sm pt-1 text-red-600">{message}</p>
                 )}
-              ></ErrorMessage>
+              ></ErrorMessage> */}
             </div>
 
             <div className="mt-4">
@@ -67,13 +64,13 @@ const Login = () => {
           focus:bg-white focus:outline-none focus:placeholder-black text-black"
                 {...register("password")}
               />
-              <ErrorMessage
+              {/* <ErrorMessage
                 name="password"
                 errors={errors}
                 render={({ message }) => (
                   <p className="text-sm pt-1 text-red-600">{message}</p>
                 )}
-              ></ErrorMessage>
+              ></ErrorMessage> */}
             </div>
 
             {/* <div className="text-right mt-2">
