@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useMemo, useRef } from "react";
 import Modal from "react-modal";
 import Header from "../components/common/Header";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,12 +17,16 @@ import useHome from "../hooks/useHome";
 import CustomModal from "../components/modal/Modal";
 
 const Homepage = () => {
-  const { handleCreateNewMeeting, getUserForPrivateMeeting, userList } =
+  const { handleCreateNewMeeting,JoinMeeting,getUserForPrivateMeeting, userList } =
     useHome();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  console.log(selectedUsers);
-
+  const meetUID = useRef('')
+  console.log('loaded')
+  const join_meeting = async () => {
+      await JoinMeeting(meetUID.current)
+  }
+  
   const handleMeeting = () => {
     console.log(activeSlide);
     if (activeSlide.type === "public" || activeSlide.type === "asktojoin") {
@@ -142,7 +146,7 @@ const Homepage = () => {
     <>
       <Header />
       <div className="flex justify-around items-center ">
-        <div className="w-80 z-0 text-center mx-auto ms-28 my-5 border-2 shadow-xl shadow-indigo-300 rounded-full p-10 relative ">
+        <div className="w-80 z-0 text-center ms-28 my-5 border-2 shadow-xl shadow-indigo-300 rounded-full p-10 relative ">
           <Swiper
             modules={[Navigation]}
             spaceBetween={50}
@@ -187,9 +191,10 @@ const Homepage = () => {
               <input
                 placeholder="Enter your code here..."
                 className="p-3 rounded-xl focus:ring-0 border focus:outline-none focus:border-violet-500 outline-1  focus:border-transparent rounded-bl-xl rounded-tl-xl rounded-br-none focus:border-r-0 rounded-tr-none"
+                onChange={(e) => {meetUID.current = e.target.value}}
               />
-              <button className="px-4 py-2 border border-violet-700 bg-violet-300 text-violet-950  rounded-br-xl rounded-tr-xl hover:bg-violet-700 hover:text-white  ">
-                GO
+              <button className="px-4 py-2 border border-violet-700 bg-violet-300 text-violet-950  rounded-br-xl rounded-tr-xl hover:bg-violet-700 hover:text-white " onClick={join_meeting}>
+                JOIN
               </button>
             </div>
           </div>

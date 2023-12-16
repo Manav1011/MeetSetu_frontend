@@ -3,6 +3,9 @@ import MainRouter from "./routes/routes";
 import { useState } from "react";
 import "./App.css";
 import { AuthProvider } from "./context/AuthContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-chat-elements/dist/main.css"
+
 function App() {
   const [progress, setProgress] = useState(false);
   if (typeof window !== "undefined") {

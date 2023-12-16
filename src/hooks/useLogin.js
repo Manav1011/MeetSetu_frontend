@@ -20,9 +20,18 @@ const useLogin = ({
   setEnterOTP,
   AUTHotp,
 }) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const axiosInstance = axios.create();
   const [socket, SetSocket] = useState(false);
+  const [accessToken,setAccessToken] = useState(null)
+
+  useEffect(() => {
+    if(accessToken){      
+      console.log('Now here')
+      console.log(accessToken)
+      navigate('/')
+    }
+  },[accessToken])
   let endpoint = "/stakeholder/login/";
   let method = "post";
   let headers = header;
@@ -57,8 +66,8 @@ const useLogin = ({
           setSecret(secretKey);
           setEmailVerified(response_obj?.response?.data?.data?.email_verified);
           setQrSvg(svgQR);
+          localStorage.setItem('user',response_obj?.response?.data?.data?.email)
           handleOpenModal();
-
           const socket = new WebSocket(`${base_url_socket}/auth/${secretKey}/`);
           SetSocket(socket);
           socket.onopen = async () => {
@@ -76,15 +85,15 @@ const useLogin = ({
             }
             if (data.data && data.data.verified && data.data.verified == true) {
               localStorage.setItem("accessToken", data.data.tokens.access);
-              localStorage.setItem("refreshToken", data.data.tokens.refresh);
-              navigate('/')
+              localStorage.setItem("refreshToken", data.data.tokens.refresh);              
+              setAccessToken(localStorage.getItem('accessToken'))
             }
           };
           socket.onclose = async () => {
             console.log("Socket closed");
           };
           socket.onerror = async (e) => {
-            console.log("Socket error: ", e);
+            console.log(e);
           };
         }
       } else {        
