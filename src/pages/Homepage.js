@@ -173,7 +173,7 @@ const Homepage = () => {
           </div>
           <div className=" w-10/12 mx-auto flex  justify-evenly items-center ">
             <Link
-              // to={`/camera/${id}`}
+              // to={`/meet/${id}`}
               onClick={() => {
                 handleMeeting();
               }}

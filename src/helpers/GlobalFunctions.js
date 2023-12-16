@@ -92,7 +92,7 @@ const expireToken = async (refreshToken) => {
 
   return axios
     .post(
-      `${base_url}/auth/api/token/refresh/`,
+      `${base_url}/auth/token/refresh/`,
       { refresh: refreshToken },
       { headers: header }
     )

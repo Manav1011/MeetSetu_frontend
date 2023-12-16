@@ -3,10 +3,16 @@ import React, { useEffect } from "react";
 import { header } from "../utils/constant";
 import { APIMiddleware } from "../helpers/GlobalFunctions";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert";
 
-const useCamera = () => {
+const useMeetInfo = (props) => {
+  const {
+    meetDetails,
+    setMeetDetails
+  } = props
+  
   const axiosInstance = axios.create();
-  const { id } = useParams();
+  const { id } = useParams();  
 
   useEffect(() => {
     fetchMeetingData(id);
@@ -26,10 +32,24 @@ const useCamera = () => {
       headers,
       null,
       params
-    );
+    );    
+    if(response_obj.error === false){
+      if(response_obj.response.status == 200){
+        if (response_obj.response.data){
+          setMeetDetails(response_obj.response.data.data)
+        }
+      }
+    }else{
+      Swal({
+        title: response_obj.error.message,
+        text: "!!!!",
+        icon: "error",
+        button: "OK",
+      });
+    }
   };
 
   return { id };
 };
 
-export default useCamera;
+export default useMeetInfo;

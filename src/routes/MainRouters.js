@@ -5,7 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import Homepage from "../pages/Homepage";
 import PrivateRoute from "./PrivateRoute";
-import CameraPage from "../pages/CameraPage";
+import MeetView from "../pages/MeetView";
 
 const MainRouters = () => {
   return (
@@ -21,7 +21,7 @@ const MainRouters = () => {
           </PrivateRoute>
         }
       ></Route>
-      <Route path="/camera/:id" element={<CameraPage />} />
+      <Route path="/meet/:id" element={<MeetView />} />
     </Routes>
   );
 };

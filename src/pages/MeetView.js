@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Webcam from "react-webcam";
 import { useAuth } from "../context/AuthContext";
-import useCamera from "../hooks/useCamera";
+import useMeetInfo from "../hooks/useMeetInfo";
+import { useEffect } from "react";
 
-const CameraPage = () => {
+const MeetView = () => {
   const webcamRef = React.useRef(null);
   const [meetingInfoPopUp, setMeetingInfoPopUp] = useState(false);
   const { activeMeeting } = useAuth();
   const { id } = useParams();
-  const { id: pramas } = useCamera();
+  const [meetDetails,setMeetDetails] = useState(null)  
+  useMeetInfo({meetDetails:meetDetails,setMeetDetails:setMeetDetails});  
 
-  console.log(activeMeeting);
+  console.log(meetDetails);
   const handleActivePopUp = () => {
     setMeetingInfoPopUp((prev) => !prev);
   };
@@ -20,12 +22,12 @@ const CameraPage = () => {
       <div className="flex">
         {/* Left side: Camera view */}
         <div className="w-1/2 p-4">
-          <Webcam
+          {/* <Webcam
             audio={false}
             ref={webcamRef}
             mirrored={true} // Adjust as needed
             screenshotFormat="image/jpeg"
-          />
+          /> */}
         </div>
 
         {/* Right side: Meeting participants */}
@@ -59,7 +61,7 @@ const CameraPage = () => {
             {meetingInfoPopUp && (
               <div className="absolute bottom-5">
                 <div className="bg-white p-5  border-2 border-black">
-                  {activeMeeting.title}
+                  {meetDetails.type}
                 </div>
               </div>
             )}
@@ -72,4 +74,4 @@ const CameraPage = () => {
   );
 };
 
-export default CameraPage;
+export default MeetView;

@@ -42,7 +42,7 @@ const useHome = () => {
       );
       console.log(response_obj.response.data.data.UID, "response --------");
       const uid = response_obj.response.data.data.UID;
-      navigate(`/camera/${uid}`);
+      navigate(`/meet/${uid}`);
     } catch (error) {
       console.log(error);
       return error;
