@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import Swal from "sweetalert";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const useLogin = ({
@@ -19,8 +20,8 @@ const useLogin = ({
   setEnterOTP,
   AUTHotp,
 }) => {
+  let navigate = useNavigate();
   const axiosInstance = axios.create();
-  
   const [socket, SetSocket] = useState(false);
   let endpoint = "/stakeholder/login/";
   let method = "post";
@@ -69,12 +70,14 @@ const useLogin = ({
           };
           socket.onmessage = async (e) => {
             let data = JSON.parse(e.data);
+            console.log(data)
             if (data.qr_scanned == true) {
               setEnterOTP(true);
             }
-            if (data.data.verified == true) {
+            if (data.data && data.data.verified && data.data.verified == true) {
               localStorage.setItem("accessToken", data.data.tokens.access);
               localStorage.setItem("refreshToken", data.data.tokens.refresh);
+              navigate('/')
             }
           };
           socket.onclose = async () => {
@@ -84,10 +87,10 @@ const useLogin = ({
             console.log("Socket error: ", e);
           };
         }
-      } else {
-        if (response_obj.response) {
+      } else {        
+        if (response_obj.error.response) { 
           Swal({
-            title: response_obj?.response?.data?.message,
+            title: response_obj?.error?.response?.data?.message,
             text: "!!!!",
             icon: "error",
           });
@@ -99,7 +102,7 @@ const useLogin = ({
             button: "OK",
           });
         }
-        console.log("Error in Login: ", response_obj.error);
+        // console.log("Error in Login: ", response_obj.error);
       }
     } catch (error) {}
   };
