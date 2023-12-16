@@ -1,7 +1,8 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import MainRouter from "./routes/routes";
 import { useState } from "react";
-import "./App.css"
+import "./App.css";
+import { AuthProvider } from "./context/AuthContext";
 function App() {
   const [progress, setProgress] = useState(false);
   if (typeof window !== "undefined") {
@@ -10,15 +11,11 @@ function App() {
 
   return (
     <Router>
-      
-      <div className="App">
-      {/* <LoadingBar
-        color={"#1f6feb"}
-        progress={progress}
-        onLoaderFinished={() => setProgress(0)}
-      /> */}
-        <MainRouter />
-      </div>
+      <AuthProvider>
+        <div className="App">
+          <MainRouter />
+        </div>
+      </AuthProvider>
     </Router>
   );
 }

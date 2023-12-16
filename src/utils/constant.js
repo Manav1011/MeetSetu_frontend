@@ -4,5 +4,5 @@ const header = {
 };
 
 const base_url = `${window.location.protocol}//192.168.29.18:8000`;
-
-export { base_url, header };
+const base_url_socket = `ws://192.168.29.18:8000`;
+export { base_url, header,base_url_socket };

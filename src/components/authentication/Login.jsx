@@ -4,14 +4,36 @@ import { Link } from "react-router-dom";
 import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../helpers/yupValidator";
-import storysetillustration from './Digital presentation-amico.svg'
+import storysetillustration from "./Digital presentation-amico.svg";
 import useLogin from "../../hooks/useLogin";
-const Login = () => {
+import { useAuth } from "../../context/AuthContext";
+const Login = (props) => {
+  const {
+    setEmailVerified,
+    setQrSvg,
+    setSecret,
+    handleOpenModal,
+    SetAuthSocket,
+    setAuthLogs,
+    setEnterOTP,
+    AUTHotp,
+  } = props;
   const { register, handleSubmit } = useForm();
-  const { handleLogin } = useLogin();
+  const { handleLogin } = useLogin({
+    setEmailVerified,
+    setQrSvg,
+    setSecret,
+    handleOpenModal,
+    SetAuthSocket,
+    setAuthLogs,
+    setEnterOTP,
+    AUTHotp,
+  });
   const handleFormSubmit = (data) => {
     handleLogin(data);
   };
+  const context = useAuth();
+  
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
       <div className="hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">

@@ -11,6 +11,7 @@ const Signup = () => {
   const handleFormSubmit = (data) => {
     handleSignup(data);
   };
+  
   return (
     <div>
       <section className="flex flex-col md:flex-row h-screen items-center">
