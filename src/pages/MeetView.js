@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Webcam from "react-webcam";
-import { useAuth } from "../context/AuthContext";
 import useMeetInfo from "../hooks/useMeetInfo";
-import { useEffect } from "react";
 
 const MeetView = () => {
   const webcamRef = React.useRef(null);
   const [meetingInfoPopUp, setMeetingInfoPopUp] = useState(false);
-  const { activeMeeting } = useAuth();
   const { id } = useParams();
-  const [meetDetails,setMeetDetails] = useState(null)  
-  useMeetInfo({meetDetails:meetDetails,setMeetDetails:setMeetDetails});  
+  const [meetDetails, setMeetDetails] = useState(null);
+  useMeetInfo({ meetDetails: meetDetails, setMeetDetails: setMeetDetails });
 
   console.log(meetDetails);
   const handleActivePopUp = () => {

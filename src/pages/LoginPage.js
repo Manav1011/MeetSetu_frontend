@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Login from "../components/authentication/Login";
 import QRModal from "../components/common/QRmodal";
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,13 +14,18 @@ const LoginPage = () => {
   const [AUTHotp, setOtp] = useState("");
   const [logs, setAuthLogs] = useState("");
 
-
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate replace to={"/"} />;
+  }
   return (
     <div>
       <Login

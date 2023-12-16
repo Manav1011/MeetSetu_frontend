@@ -1,32 +1,52 @@
 // AuthProvider.js
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import Spinner from "../components/common/Spinner";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setAuthenticated] = useState(-1);
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [activeMeeting, setActiveMeeting] = useState(null);
-  const login = () => {
-    // Perform login logic, set isAuthenticated to true on success
-    setAuthenticated(1);
+  const [loading, setLoading] = useState(true);
+
+  const checkUserExist = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
+    }
+    setLoading(false);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      checkUserExist();
+    }, [500]);
+  }, []);
+
   const logout = () => {
-    // Perform logout logic, set isAuthenticated to false
-    setAuthenticated(0);
+    const accessToken = localStorage.removeItem("accessToken");
+    setAuthenticated(false);
+    setLoading(false);
   };
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        login,
         logout,
         setActiveMeeting,
         activeMeeting,
       }}
     >
-      {children}
+      {loading ? (
+        <div className="flex h-screen w-full flex-col items-center justify-center">
+          <Spinner size="large" />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
