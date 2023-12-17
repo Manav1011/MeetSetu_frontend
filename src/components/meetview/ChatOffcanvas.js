@@ -14,16 +14,20 @@ function ChatOffcanvas(props) {
     }  = props
     const [adminOnly,setAdminOnly] = useState(false)    
     const [chats,setChats] = useState([])
+    const [files,setFiles] = useState([])
     const [user,setUser] = useState(localStorage.getItem('user'))
     const [hostOnly,setHostOnly] = useState(false)
-    const message = useRef('')
+    const [message,setMessage] = useState('')
     chatSocket.onmessage = async (e) => {
         let data = JSON.parse(e.data)
         if(data.type == 'adminonly'){
             setHostOnly(data.adminonly)
         }
-        if(data.type == 'chat' || data.type == 'file_upload'){
+        if(data.type == 'chat'){
             setChats(prevArray => [...prevArray, data]);
+        }
+        if(data.type == 'file_upload'){
+            setFiles(prevArray => [...prevArray, data])
         }
         console.log(chats)
     }
@@ -40,14 +44,14 @@ function ChatOffcanvas(props) {
     },[adminOnly])
     
     const sendMessage = async () => {
-        if(message.current.length > 0){
+        if(message.length > 0){
             chatSocket.send(JSON.stringify({            
                 type:'chat',
-                message:message.current,
+                message:message,
                 user:user
-            }))
+            }))  
+            setMessage('')          
         }
-        console.log(message.current)
     }
     function readFileAsDataUri(file) {
         return new Promise((resolve, reject) => {
@@ -71,6 +75,12 @@ function ChatOffcanvas(props) {
         }))
         }
     }    
+    const DownloadFile = async(file_name,content) =>{
+        let downloadLink = document.createElement('a');
+        downloadLink.href = content;
+        downloadLink.download = file_name
+        downloadLink.click();
+    }
     if(meetDetails){
         var chatBoxHeight = meetDetails.is_owner ? {display:'flex',flexDirection:'column',maxHeight:'100%',overflowY:'scroll'} : {display:'flex',flexDirection:'column',maxHeight:'100%',overflowY:'scroll'}
     }
@@ -88,8 +98,8 @@ function ChatOffcanvas(props) {
                     </Card.Body>                                                                                                                                                                                                                             
                 </Card>
             ):null}
-            <Card className='' style={{border:'none',position:'absolute', bottom:'0',width:'100%',height:'100%'}}>
-                <Card.Body className="m-0 p-0" style={chatBoxHeight}>
+            <Card className='' style={{border:'none',position:'absolute', bottom:'0',width:'100%',maxHeight:'100%'}}>
+                <Card.Body className="m-0 p-0 chatelement" style={chatBoxHeight}>
                     {chats.map((e,i) => (
                         <Card className='border-0'>   
                         <Card.Body>                     
@@ -100,7 +110,20 @@ function ChatOffcanvas(props) {
                             <cite title="Source Title">{e.user}</cite>
                         </footer>                        
                     </Card.Body></Card>
-                    ))}             
+                    ))}  
+                    {files.map((e,i) => (
+                        <Card className='border-2 chatelement'>   
+                        <Card.Header className='' style={{overflowX:'scroll'}}>{e.fileName} </Card.Header>
+                        <Card.Body className='border-0'>
+                        <footer className="blockquote-footer m-0">
+                            <cite title="Source Title">{e.user}</cite>
+                        </footer>             
+                    </Card.Body>
+                    <Card.Footer className='bg-primary'>
+                        <button className='btn btn-primary w-100' onClick={() => {DownloadFile(e.fileName,e.content)}}>Download</button>
+                        </Card.Footer>
+                    </Card>
+                    ))}                        
                 </Card.Body>                                                                                                                                                                                                                  
             </Card>            
         </Offcanvas.Body>
@@ -110,11 +133,12 @@ function ChatOffcanvas(props) {
             placeholder="Type here..."
             multiline={false}
             className='m-2 p-2'
-            onChange={(e) => {message.current = e.target.value}}
+            onChange={(e) => {setMessage(e.target.value)}}
+            value={message}            
         />
         <div>
-            <input type="file" className="mb-3 form-control" id="fileupload" onChange={(e) => sendDataUri(e)}/>
-            <Button text={"Send"} title="Send" onClick={sendMessage} className='w-100'/>            
+            <Button text={"Send"} title="Send" onClick={sendMessage} className='w-100'/> 
+            <input type="file" className="mt-3 form-control" id="fileupload" onChange={(e) => sendDataUri(e)} accept="image/*,application/pdf"/>
         </div>
         </>
         ):null}
