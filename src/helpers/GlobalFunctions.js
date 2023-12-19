@@ -24,7 +24,7 @@ const APIMiddleware = async (
     ? { secret: secret, data: await encrypt_xor(JSON.stringify(data), secret) }
     : { data: data };
 
-  if(access && secret){
+  if(access && refresh){    
     headers["Authorization"] = `Bearer ${access}`;
   }
 

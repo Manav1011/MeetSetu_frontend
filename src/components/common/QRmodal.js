@@ -48,14 +48,14 @@ function QRModal(props) {
               </Card.Title>
               <OtpInput
                 value={AUTHotp}
-                onChange={setOtp}
+                onChange={setOtp}                
                 numInputs={6}
                 renderSeparator={<span>-</span>}
                 renderInput={(props) => <input {...props} />}
                 placeholder="000000"
                 containerStyle="container"
-                inputStyle="form-control-lg otpinputs  "
-                inputType="text"
+                inputStyle="otpinputs"
+                inputType="password"
               />
               <div className="container mt-4" id="authotplog">
                 {JSON.stringify(logs)}

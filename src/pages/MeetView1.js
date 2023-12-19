@@ -50,13 +50,12 @@ const MeetView = () => {
       setCreatedAt(`${hour}:${minute}`)
     }
   },[meetDetails])  
-
   useEffect(() => {   
       setSignalingSocket(new WebSocket(`${base_url_socket}/signaling/${id}/`))
-      setChatSocket(new WebSocket(`${base_url_socket}/chat/${id}/`))                   
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((obj) => {
-        setLocalStream(obj);
-      })
+      setChatSocket(new WebSocket(`${base_url_socket}/chat/${id}/`))              
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((obj) =>  {
+        setLocalStream(obj)
+      })                 
   },[])
 
   const CloseAll = async (callback) => {
@@ -88,13 +87,6 @@ const MeetView = () => {
         localStream.getTracks().forEach((track) => {            
           localPeerObject.addTrack(track, localStream);          
         })
-        let remoteStream = new MediaStream();
-        localPeerObject.ontrack = async (event) => {
-            event.streams[0].getTracks().forEach((track) => {      
-                remoteStream.addTrack(track);
-            });
-        }
-        document.getElementById('webcamVideo').srcObject = remoteStream
         localPeerObject.onicecandidate = async (e) => {
           try {
             signalingSocket.send(JSON.stringify({
@@ -106,6 +98,18 @@ const MeetView = () => {
             console.log(error)
           }
         }
+        localPeerObject.ontrack = async (event) => {
+          let remoteStream = new MediaStream();  
+          event.streams[0].getTracks().forEach((track) => {            
+              remoteStream.addTrack(track);              
+            });        
+            let videoEl = document.createElement('video');
+            videoEl.srcObject = remoteStream;
+            videoEl.autoplay = true; // Add this line for autoplay
+            videoEl.style.width = '300px'; // Set dimensions using style
+            videoEl.style.height = '300px';
+            document.body.appendChild(videoEl);            
+         };  
         setLocalPeerObjects(prevState => ({
           ...prevState,  // Copy existing state
           [data.new_peer]: localPeerObject   // Add new key-value pair
@@ -121,18 +125,29 @@ const MeetView = () => {
       if(data.action === 'offer' && data.sdp_offer){
         // Send an answer
         let localPeerObject = new RTCPeerConnection(servers)        
-        let localStream = await  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        let localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }) 
         localStream.getTracks().forEach((track) => {            
             localPeerObject.addTrack(track, localStream);          
         })
         await localPeerObject.setRemoteDescription(data.sdp_offer)
+        localPeerObject.ontrack = async (event) => {
+          let remoteStream = new MediaStream();  
+          event.streams[0].getTracks().forEach((track) => {            
+              remoteStream.addTrack(track);
+            });        
+            let videoEl = document.createElement('video');
+            videoEl.srcObject = remoteStream;
+            videoEl.autoplay = true; // Add this line for autoplay
+            videoEl.style.width = '300px'; // Set dimensions using style
+            videoEl.style.height = '300px';
+            document.body.appendChild(videoEl);            
+         };
         let sdp_answer = await localPeerObject.createAnswer();
         await localPeerObject.setLocalDescription(sdp_answer);
         setRemotePeerObjects(prevState => ({
           ...prevState,  // Copy existing state
           [data.sender_channel]: localPeerObject   // Add new key-value pair
-        }));        
-        console.log(remotePeerObjects[data.sender_channel])
+        }));
         signalingSocket.send(JSON.stringify({
           'action':'answer',          
           'sdp_answer':sdp_answer
@@ -143,11 +158,11 @@ const MeetView = () => {
         await localPeerObjects[data.channel_name].setRemoteDescription(data.sdp_answer)
       }if(data.action === 'onicecandidate' && data.channel_name && data.sender_channel && data.candidate){  
         try{
-            console.log(remotePeerObjects[data.sender_channel])
           remotePeerObjects[data.sender_channel].addIceCandidate(data.candidate);
         }catch (error) {
           console.log(error) 
         }        
+        console.log(remotePeerObjects[data.sender_channel])
       }
     };
   }
@@ -173,7 +188,6 @@ const MeetView = () => {
         {/* Left side: Camera view */}
         <div className="w-100 d-flex" style={{flexDirection:'row',height:'90vh',flexWrap:'wrap',overflowX:'scroll',justifyContent:'center'}}>
           {localStream ? (<VideoElements stream={localStream} user={user}/>): null}                    
-          <video id="webcamVideo" autoplay playsinline></video>
         </div>
         {/* Right side: Meeting participants */}              
       <div className="absolute bottom-0  text-black w-full flex  justify-between p-4">

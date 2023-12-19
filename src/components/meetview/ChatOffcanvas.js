@@ -10,12 +10,11 @@ import { Button } from "react-chat-elements";
 
 function ChatOffcanvas(props) {
     const {
-        chatSocket,meetDetails,showChatOffcanvas,setShowChatOffcanvas
+        chatSocket,meetDetails,showChatOffcanvas,setShowChatOffcanvas,user
     }  = props
     const [adminOnly,setAdminOnly] = useState(false)    
     const [chats,setChats] = useState([])
     const [files,setFiles] = useState([])
-    const [user,setUser] = useState(localStorage.getItem('user'))
     const [hostOnly,setHostOnly] = useState(false)
     const [message,setMessage] = useState('')
     chatSocket.onmessage = async (e) => {
@@ -37,10 +36,12 @@ function ChatOffcanvas(props) {
     },[chats])
 
     useEffect(() => {
-        chatSocket.send(JSON.stringify({
-            type:'adminonly',
-            adminonly:adminOnly
-        }))
+        if(chatSocket.readyState == WebSocket.OPEN){
+            chatSocket.send(JSON.stringify({
+                type:'adminonly',
+                adminonly:adminOnly
+            }))
+        }
     },[adminOnly])
     
     const sendMessage = async () => {
