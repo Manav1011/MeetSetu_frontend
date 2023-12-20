@@ -3,11 +3,12 @@ import Card from 'react-bootstrap/Card';
 
 function VideoElements(props) {
   const {user,stream} = props
+  console.log(stream)
   const videoRef = useRef(null);
   useEffect(() => {
     // Set the srcObject when the component mounts or when the stream changes
     if (videoRef.current) {
-      videoRef.current.srcObject = stream;
+      videoRef.current.srcObject = stream;      
     }
 
     // Clean up the stream when the component unmounts or when the stream changes
@@ -18,16 +19,14 @@ function VideoElements(props) {
     };
   }, [stream]);
   return (
-        <Card     
-          text='dark'
-          style={{ width: '24rem' ,height:'24rem'}}
-          className="m-4"
-        >
-          <Card.Header>{user}</Card.Header>
-          <Card.Body className="d-flex" style={{alignItems:'center',flexDirection:'column'}}>            
-            <video ref={videoRef} style={{ width: '300px', height: '300px' }} autoPlay playsInline muted={user === 'You'} />
-          </Card.Body>
-        </Card>    
+    <>
+        <div class="participant-card position-relative m-4">
+          <div class="card-header text-center">
+            {user}
+          </div>
+          <video ref={videoRef} style={{ width: '300px', height: '300px' }} autoPlay playsInline/>
+        </div>
+    </>
   )
 }
 

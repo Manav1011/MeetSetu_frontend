@@ -6,13 +6,15 @@ import {
 } from "../helpers/GlobalFunctions";
 import axios from "axios";
 import io from "socket.io-client";
-import Swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const useSignup = () => {
   const axiosInstance = axios.create();
   let endpoint = "/stakeholder/signup/";
   let method = "post";
   let headers = header;
+  const navigate = useNavigate()
   const handleSignup = async (body) => {
     try {
       let response_obj = await APIMiddleware(
@@ -34,6 +36,15 @@ const useSignup = () => {
           socket.onmessage = async (e) => {
             let data = JSON.parse(e.data);
             if (data.action === "email_confirmed") {
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "You've been signedup successfully...Please log in now!!",
+                showConfirmButton: false,
+                timer: 1500
+              }).then(() => {
+                navigate('/login');
+              });
               console.log("Socket message: ", e.data);
             }
           };
@@ -44,7 +55,7 @@ const useSignup = () => {
             console.log("Socket error: ", e);
           };
 
-          Swal({
+          Swal.fire({
             title: response_obj.response.data.message,
             text: "!!!!",
             icon: "success",
@@ -55,13 +66,13 @@ const useSignup = () => {
         console.log(response_obj?.response?.data?.data?.secret);
       } else {
         if (response_obj.response) {
-          Swal({
+          Swal.fire({
             title: response_obj?.response?.data?.message,
             text: "!!!!",
             icon: "error",
           });
         } else {
-          Swal({
+          Swal.fire({
             title: response_obj.error.message,
             text: "!!!!",
             icon: "error",

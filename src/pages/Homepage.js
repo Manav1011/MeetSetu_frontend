@@ -55,7 +55,7 @@ const Homepage = () => {
       type: "private",
       image: Conference,
       title: "Private",
-      description: "Discuss important matters with your team.",
+      description: "Exclusive to users chosen by the host, ensuring controlled access for confidential discussions or team collaborations.",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,8 +73,8 @@ const Homepage = () => {
       id: 2,
       type: "onetoone",
       image: FaceToFace,
-      title: "Face to Face",
-      description: "Have interactive face-to-face meetings.",
+      title: "One on One",
+      description: "Involves only the host and one other person for focused and personalized interactions, suitable for private conversations or mentorship.",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +94,7 @@ const Homepage = () => {
       type: "public",
       image: Public,
       title: "Public",
-      description: "Share information with the public.",
+      description: "A fully open forum where any user can join without approval. Ideal for inclusive discussions with a diverse audience.",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,7 @@ const Homepage = () => {
       type: "asktojoin",
       image: AskToJoin,
       title: "Ask to Join",
-      description: "Invite others to join your meetings.",
+      description: "Requires user approval before joining, allowing hosts to curate attendees based on specific criteria, balancing inclusivity and control.",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
