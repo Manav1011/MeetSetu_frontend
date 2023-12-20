@@ -21,10 +21,9 @@ function VideoElements(props) {
   return (
     <>
         <div class="participant-card position-relative m-4">
-          <div class="card-header text-center">
-            {user}
+          <div class="card-header text-center">            
           </div>
-          <video ref={videoRef} style={{ width: '300px', height: '300px' }} autoPlay playsInline/>
+          <video ref={videoRef} style={{ width: '600px', height: '600px' }} autoPlay playsInline/>
         </div>
     </>
   )
